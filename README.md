@@ -36,21 +36,32 @@ A developmental **schedule** (plastic→stable, gated by an innate program) beat
 - **E — efficiency**: ends sparse (few units fire per query);
 - **A — adaptability**: can still acquire something genuinely new, from a *brief* late-life encounter.
 
-Three policies run on the **same** life-stream:
+Three policies run on the **same** life-stream, in two worlds — a *sparse* world (near-orthonormal concepts) and a *dense* world (overlapping concepts, mean pairwise overlap +0.41). The dense world is where all three axes bite at once:
 
-| policy | competence (C) | late-adapt (A) | efficiency (E) | units | balanced (C·E·A) |
-|---|---|---|---|---|---|
-| always-plastic | 0.53 | 1.00 | 0.95 | 23 | 0.507 |
-| born-mature | 0.70 | **0.00** | 0.88 | 6 | 0.000 |
-| **developmental** | **1.00** | **1.00** | 0.91 | 11 | **0.909** |
+**Dense / overlapping world** (the one that tests the gate's energy advantage):
 
-Read it by the two horns of the dilemma:
+| policy | competence (C) | late-adapt (A) | active % | efficiency (E) | units | balanced (C·E·A) |
+|---|---|---|---|---|---|---|
+| always-plastic | 0.65 | 1.00 | 29% | 0.71 | 23 | 0.463 |
+| born-mature | 0.70 | **0.00** | 12% | 0.88 | 6 | 0.000 |
+| **developmental** | **0.97** | **1.00** | **10%** | **0.90** | 10 | **0.873** |
 
-- **always-plastic** is the *loss-of-stability* end. It never stops drifting, so background noise slowly rewrites the concepts it carved — competence collapses to 0.53. It adapts fine and stays sparse, but it cannot hold what it learned.
-- **born-mature** is the *loss-of-plasticity* end. It holds the little it managed to carve (0.70) but **misses the brief late novelty entirely** (0.00) — frozen, it cannot catch something it only meets a handful of times.
-- **developmental** keeps *both*: it carved the world during the open window and then froze it (noise can no longer rewrite it → competence 1.00), and the plasticity floor still caught the brief late novelty (1.00). It is the only policy strong on both horns.
+Read it by the two horns of the dilemma, plus the energy axis:
 
-That is the **plasticity–stability dilemma** — the real, current obstacle in continual learning — resolved by *scheduling* the gates rather than fixing them.
+- **always-plastic** is the *loss-of-stability* end. It never stops drifting, so noise keeps rewriting what it carved — competence stays low (0.65). And with an immature, broad gate it fires **29%** of its units on every overlapping query: it cannot hold what it learned *and* it burns energy doing it.
+- **born-mature** is the *loss-of-plasticity* end. It holds the little it carved (0.70) and is sparse (12%), but it **misses the brief late novelty entirely** (0.00) — frozen, it cannot catch something it meets only a handful of times.
+- **developmental** keeps all of it: it carved the world in the open window and froze it (competence 0.97), the matured gate fires only **10%** of units on the same dense input (the chandelier slicing the spectrum), and the plasticity floor still caught the brief late novelty (1.00).
+
+This is the **plasticity–stability dilemma** — the real, current obstacle in continual learning — resolved by *scheduling* the gates rather than fixing them, and the matured gate paying its way in energy on top.
+
+**The energy advantage needs a dense world** (this is the honest control). The same matured gate, in the *sparse* world, fires 9% of units versus the immature gate's 5% — no advantage, because near-orthonormal concepts recall sparsely at any threshold. The advantage appears only when concepts overlap:
+
+| | immature gate fires | matured gate fires |
+|---|---|---|
+| sparse world (overlap +0.00) | 5% | 9% — *gate barely matters* |
+| dense world (overlap +0.41) | 29% | 10% — *~3× fewer units* |
+
+The matured chandelier gate earns its energy only when there is a dense spectrum to slice. The gap widens with overlap.
 
 ---
 
@@ -74,11 +85,12 @@ Pure numpy, no GPU. Prints the table above and the verdict. Everything is seeded
 **Verified in code (reproducible, seeded):**
 - the developmental schedule wins on the C·E·A combination (0.909) vs always-plastic (0.507) and born-mature (0.000);
 - the two failure modes are real and separable: interference destroys competence at the always-plastic end; freezing destroys adaptability at the born-mature end; the schedule keeps both;
-- the innate program (136 numbers) contains none of the world's concepts — those are grown in the open window.
+- the innate program (136 numbers) contains none of the world's concepts — those are grown in the open window;
+- in a **dense** world (concept overlap +0.41) the matured gate fires ~3× fewer units per recall than the immature gate (10% vs 29%), with no such gap in the sparse world (9% vs 5%) — the gate's energy advantage is real and overlap-dependent.
 
 **Honest limits:**
 - relative units; parameters chosen, not measured; single seeded run-pair per policy;
-- **efficiency (E) did not discriminate here** — the toy concepts are near-orthonormal, so recall is sparse at *any* gate threshold and gate-maturation doesn't change it. The two real discriminators were competence and adaptability. Making the gate→sparsity axis bite needs *overlapping* concepts (so a broad gate lets many partial matches fire) — flagged as the next build, not claimed now;
+- in the **sparse** world, efficiency (E) does not discriminate — near-orthonormal concepts recall sparsely at any gate, so the only discriminators there are competence and adaptability. The gate→sparsity advantage shows up only in the **dense** world (~3× fewer units fired by the matured gate), and it is a modest ~3× at overlap +0.41, not the "wild vs nothing" a looser telling might claim — it grows with density;
 - "gate", "plasticity", "salience" are scalar abstractions of rich biology; the external reward ("caretaker") is a single scalar tag, not a modelled social process.
 
 **The bet (untouched):** that any of this is *experienced* rather than processed. A schedule that grows a competent, sparse, still-adaptable network locates the developmental trade-off precisely. It does not touch the hard problem.
@@ -87,7 +99,7 @@ Pure numpy, no GPU. Prints the table above and the verdict. Everything is seeded
 
 ## Where it goes next
 
-1. **Make efficiency bite.** Overlapping (non-orthonormal) concepts, so a broad infant gate is genuinely dense and the matured gate genuinely sparse — turning the chandelier into the dynamic-sparsity "firewall" the energy argument wants.
+1. ~~Make efficiency bite with overlapping concepts.~~ **Done** (the dense world above): the matured gate fires ~3× fewer units. The next refinement is to push overlap higher and watch the gap widen, and to bill the active fraction as actual wattage (the metabolic-loop meter).
 2. **Internalise the caretaker.** Replace the external salience tag with a learned value model the system grows during the window and runs on its own afterward — the scaffold withdrawn, as it is in development.
 3. **Stack windows.** Different gate populations with different schedules (sensory windows close early, associative ones late), so one network has *several* critical periods at once — the layered developmental program a real cortex runs.
 
