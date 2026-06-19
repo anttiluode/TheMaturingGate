@@ -1,5 +1,9 @@
 # The Maturing Gate
 
+EDIT: Added mirror gate. The idea that the inhibitory network running faster is the mirror network of brain that learns the world model 
+and the 'normal network' is what it is trying to become. Explaining why chandelier neurons have a veto on the signal output of normal 
+neurons. Just a thought. 
+
 ### Growing a network on an innate developmental schedule — critical-period plasticity, inhibitory maturation, and the plasticity–stability compromise
 
 **PerceptionLab / Antti Luode, with Claude (Opus 4.8). Helsinki, June 2026.**
