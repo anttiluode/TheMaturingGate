@@ -1,5 +1,7 @@
 # Grown Gates
 
+EDIT: Added Two worlds. 
+
 ### The brain's fast inhibitory network, four small numpy studies: a gate grown on a developmental schedule, teaching the slow network, lesioned to read the relationship, and written by selection rather than by hand
 
 **PerceptionLab / Antti Luode, with Claude (Opus 4.8). Helsinki, Juhannus 2026.**
